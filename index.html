@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gmail AI Triage (iPad Web App)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0b0e14" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="title">Gmail AI Triage</div>
+        <div class="sub">iPad-friendly web app • Summarize + decide keep/trash/review (you approve deletes)</div>
+      </div>
+      <button id="btnSave" class="ghost">Save</button>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="col">
+          <label>Google OAuth Client ID (Web)</label>
+          <input id="googleClientId" placeholder="xxxxx.apps.googleusercontent.com" />
+          <div class="hint">Create a Google OAuth client for a Web app, then paste the Client ID here.</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Groq API key</label>
+          <input id="groqKey" type="password" placeholder="gsk_..." />
+          <div class="hint">Stored in your browser on this device (localStorage). Don’t share your iPad profile.</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Groq model</label>
+          <select id="groqModel">
+            <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (fast)</option>
+            <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (stronger)</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Batch size</label>
+          <input id="batchSize" type="number" min="1" max="25" value="10"/>
+        </div>
+        <div class="col">
+          <label>Max emails</label>
+          <input id="maxMessages" type="number" min="1" max="500" value="50"/>
+        </div>
+      </div>
+
+      <div class="row">
+        <button id="btnConnect">Connect Gmail</button>
+        <button id="btnDisconnect" class="ghost">Disconnect</button>
+        <div class="hint" id="authState">Not connected</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Gmail search query</label>
+      <input id="query" placeholder='e.g. from:notifications@github.com older_than:14d' />
+      <div class="chips">
+        <button class="chip" data-q="from:notifications@github.com">GitHub</button>
+        <button class="chip" data-q="category:promotions OR category:social">Promos+Social</button>
+        <button class="chip" data-q="has:unsubscribe">Has Unsubscribe</button>
+        <button class="chip" data-q="older_than:30d">Older than 30d</button>
+      </div>
+      <div class="row">
+        <button id="btnScan">Scan</button>
+        <button id="btnLoadLast" class="ghost">Load last scan</button>
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="title2">Results</div>
+        <div class="hint" id="summary"></div>
+      </div>
+      <div id="results"></div>
+    </div>
+
+    <div class="foot">
+      Tip: Start with GitHub + Promos, scan 50, trash obvious junk, then increase Max. Trash = move to Gmail Trash (not permanent delete).
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
